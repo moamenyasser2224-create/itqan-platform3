@@ -1,9 +1,62 @@
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import Sidebar from '../shared/Sidebar';
-import { classes, lessons } from '../data/mockData';
+import { supabase } from '../api/supabaseClient';
 
 export default function ClassManager() {
-  const activeClass = classes[0];
-  const classLessons = lessons.filter((l) => l.class_id === activeClass.id);
+  const [classes, setClasses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [teacherId, setTeacherId] = useState(null);
+
+  useEffect(() => {
+    load();
+  }, []);
+
+  async function load() {
+    setLoading(true);
+    const { data: authData } = await supabase.auth.getUser();
+    if (!authData?.user) return setLoading(false);
+
+    const { data: tProfile } = await supabase
+      .from('teacher_profiles')
+      .select('id')
+      .eq('user_id', authData.user.id)
+      .single();
+
+    if (!tProfile) return setLoading(false);
+    setTeacherId(tProfile.id);
+
+    const { data: classList } = await supabase
+      .from('classes')
+      .select('*, lessons(count), enrollments(count)')
+      .eq('teacher_id', tProfile.id)
+      .order('created_at', { ascending: false });
+
+    setClasses(classList || []);
+    setLoading(false);
+  }
+
+  async function handleCreate(e) {
+    e.preventDefault();
+    setSaving(true);
+    const title = e.target.title.value;
+    const description = e.target.description.value;
+
+    const { error } = await supabase.from('classes').insert({
+      teacher_id: teacherId,
+      title,
+      description,
+    });
+
+    setSaving(false);
+    if (!error) {
+      setShowForm(false);
+      e.target.reset();
+      load();
+    }
+  }
 
   return (
     <div className="app-shell">
@@ -11,33 +64,57 @@ export default function ClassManager() {
       <main className="main">
         <div className="page-head" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
           <div>
-            <h1>{activeClass.title}</h1>
-            <p>{activeClass.description}</p>
+            <h1>صفوفي</h1>
+            <p>أنشئ صفوفك وأضف الدروس فيها</p>
           </div>
-          <button className="btn btn-primary">+ إضافة درس جديد</button>
+          <button className="btn btn-primary" onClick={() => setShowForm((s) => !s)}>
+            {showForm ? 'إلغاء' : '+ صف جديد'}
+          </button>
         </div>
 
-        <div className="card">
-          {classLessons.map((l) => (
-            <div className="list-row" key={l.id}>
-              <div>
-                <p style={{ fontWeight: 700, fontSize: 14.5, marginBottom: 4 }}>{l.title}</p>
-                <p style={{ fontSize: 13, color: 'rgba(27,26,23,.6)' }}>
-                  {l.type === 'recorded'
-                    ? `${l.duration_minutes} دقيقة`
-                    : `مجدول: ${new Date(l.scheduled_at).toLocaleString('ar-EG')}`}
-                </p>
+        {showForm && (
+          <div className="card" style={{ marginBottom: 24 }}>
+            <form onSubmit={handleCreate}>
+              <div className="field">
+                <label>اسم الصف</label>
+                <input name="title" type="text" placeholder="مثال: الجبر - الصف الثالث الثانوي" required />
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-                <span className={`badge ${l.type}`}>{l.type === 'recorded' ? 'مسجل' : 'لايف'}</span>
-                <div className="progress-bar">
-                  <div style={{ width: `${l.completed_by_percent}%` }} />
+              <div className="field">
+                <label>وصف مختصر</label>
+                <input name="description" type="text" placeholder="عن إيه الصف ده؟" />
+              </div>
+              <button className="btn btn-primary" type="submit" disabled={saving}>
+                {saving ? 'جاري الحفظ...' : 'إنشاء الصف'}
+              </button>
+            </form>
+          </div>
+        )}
+
+        {loading ? (
+          <p>جاري التحميل...</p>
+        ) : classes.length === 0 ? (
+          <div className="card">
+            <p style={{ color: 'rgba(27,26,23,.6)', fontSize: 14.5 }}>
+              لسه معملتش صفوف. ابدأ بإنشاء أول صف ليك.
+            </p>
+          </div>
+        ) : (
+          <div className="grid cols-2">
+            {classes.map((c) => (
+              <Link to={`/teacher/classes/${c.id}`} key={c.id} style={{ textDecoration: 'none' }}>
+                <div className="card">
+                  <h3 style={{ fontSize: 17, marginBottom: 6 }}>{c.title}</h3>
+                  <p style={{ fontSize: 13.5, color: 'rgba(27,26,23,.62)', marginBottom: 14 }}>
+                    {c.description || 'بدون وصف'}
+                  </p>
+                  <p style={{ fontSize: 13, fontWeight: 700 }}>
+                    {c.enrollments?.[0]?.count || 0} طالب · {c.lessons?.[0]?.count || 0} درس
+                  </p>
                 </div>
-                <span style={{ fontSize: 13, minWidth: 34 }}>{l.completed_by_percent}%</span>
-              </div>
-            </div>
-          ))}
-        </div>
+              </Link>
+            ))}
+          </div>
+        )}
       </main>
     </div>
   );

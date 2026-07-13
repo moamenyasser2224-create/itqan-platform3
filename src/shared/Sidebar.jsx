@@ -1,4 +1,5 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { supabase } from '../api/supabaseClient';
 
 const teacherLinks = [
   { to: '/teacher', label: 'الرئيسية', end: true },
@@ -8,11 +9,17 @@ const teacherLinks = [
 
 const studentLinks = [
   { to: '/student', label: 'الرئيسية', end: true },
-  { to: '/student/classes', label: 'صفوفي' },
 ];
 
 export default function Sidebar({ role }) {
+  const navigate = useNavigate();
   const links = role === 'teacher' ? teacherLinks : studentLinks;
+
+  async function handleLogout() {
+    await supabase.auth.signOut();
+    navigate('/login', { replace: true });
+  }
+
   return (
     <aside className="sidebar">
       <div className="logo">
@@ -28,6 +35,10 @@ export default function Sidebar({ role }) {
           {link.label}
         </NavLink>
       ))}
+      <div style={{ flex: 1 }} />
+      <a onClick={handleLogout} style={{ cursor: 'pointer' }}>
+        تسجيل الخروج
+      </a>
     </aside>
   );
 }

@@ -1,24 +1,96 @@
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import Sidebar from '../shared/Sidebar';
-import { currentUser, teacherProfile, classes, students } from '../data/mockData';
+import { supabase } from '../api/supabaseClient';
 
 export default function TeacherDashboard() {
-  const totalStudents = classes.reduce((sum, c) => sum + c.students_count, 0);
+  const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState(null);
+  const [teacherProfile, setTeacherProfile] = useState(null);
+  const [classes, setClasses] = useState([]);
+  const [lessonsCount, setLessonsCount] = useState(0);
+  const [studentsCount, setStudentsCount] = useState(0);
+
+  useEffect(() => {
+    load();
+  }, []);
+
+  async function load() {
+    setLoading(true);
+    const { data: authData } = await supabase.auth.getUser();
+    if (!authData?.user) {
+      setLoading(false);
+      return;
+    }
+
+    const { data: profileData } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', authData.user.id)
+      .single();
+    setProfile(profileData);
+
+    const { data: tProfile } = await supabase
+      .from('teacher_profiles')
+      .select('*')
+      .eq('user_id', authData.user.id)
+      .single();
+    setTeacherProfile(tProfile);
+
+    if (tProfile) {
+      const { data: classList } = await supabase
+        .from('classes')
+        .select('*, lessons(count), enrollments(count)')
+        .eq('teacher_id', tProfile.id)
+        .order('created_at', { ascending: false });
+
+      setClasses(classList || []);
+
+      const totalLessons = (classList || []).reduce(
+        (sum, c) => sum + (c.lessons?.[0]?.count || 0),
+        0
+      );
+      const totalStudents = (classList || []).reduce(
+        (sum, c) => sum + (c.enrollments?.[0]?.count || 0),
+        0
+      );
+      setLessonsCount(totalLessons);
+      setStudentsCount(totalStudents);
+    }
+
+    setLoading(false);
+  }
+
+  if (loading) {
+    return (
+      <div className="app-shell">
+        <Sidebar role="teacher" />
+        <main className="main">
+          <p>جاري التحميل...</p>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="app-shell">
       <Sidebar role="teacher" />
       <main className="main">
         <div className="page-head">
-          <h1>أهلًا، {currentUser.full_name}</h1>
+          <h1>أهلًا، {profile?.full_name || 'معلم'}</h1>
           <p>
-            الاشتراك: نشط حتى {teacherProfile.subscription_expires_at} — {teacherProfile.subject}
+            {teacherProfile
+              ? `${teacherProfile.subject || ''} — الاشتراك: ${
+                  teacherProfile.subscription_status === 'trial' ? 'فترة تجربة' : 'نشط'
+                }`
+              : 'استكمل بيانات حسابك للبدء'}
           </p>
         </div>
 
         <div className="grid cols-4" style={{ marginBottom: 28 }}>
           <div className="card stat">
             <div className="label">إجمالي الطلاب</div>
-            <div className="value">{totalStudents}</div>
+            <div className="value">{studentsCount}</div>
           </div>
           <div className="card stat">
             <div className="label">عدد الصفوف</div>
@@ -26,45 +98,42 @@ export default function TeacherDashboard() {
           </div>
           <div className="card stat">
             <div className="label">الدروس المرفوعة</div>
-            <div className="value">{classes.reduce((s, c) => s + c.lessons_count, 0)}</div>
+            <div className="value">{lessonsCount}</div>
           </div>
           <div className="card stat">
-            <div className="label">متوسط التقدم</div>
-            <div className="value">
-              {Math.round(students.reduce((s, st) => s + st.progress_percent, 0) / students.length)}%
+            <div className="label">حالة الاشتراك</div>
+            <div className="value" style={{ fontSize: 20 }}>
+              {teacherProfile?.subscription_status === 'trial' ? 'تجربة' : 'نشط'}
             </div>
           </div>
         </div>
 
-        <div className="grid cols-2">
-          <div className="card">
-            <h3 style={{ marginBottom: 14, fontSize: 17 }}>صفوفي</h3>
-            {classes.map((c) => (
-              <div className="list-row" key={c.id}>
-                <div>
-                  <p style={{ fontWeight: 700, fontSize: 14.5 }}>{c.title}</p>
-                  <p style={{ fontSize: 13, color: 'rgba(27,26,23,.6)' }}>
-                    {c.students_count} طالب · {c.lessons_count} درس
-                  </p>
-                </div>
-              </div>
-            ))}
+        <div className="card">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+            <h3 style={{ fontSize: 17 }}>صفوفي</h3>
+            <Link to="/teacher/classes" className="btn btn-primary">
+              + صف جديد
+            </Link>
           </div>
 
-          <div className="card">
-            <h3 style={{ marginBottom: 14, fontSize: 17 }}>آخر نشاط للطلاب</h3>
-            {students.map((s) => (
-              <div className="list-row" key={s.id}>
-                <div>
-                  <p style={{ fontWeight: 700, fontSize: 14.5 }}>{s.full_name}</p>
-                  <p style={{ fontSize: 13, color: 'rgba(27,26,23,.6)' }}>{s.last_active}</p>
+          {classes.length === 0 ? (
+            <p style={{ color: 'rgba(27,26,23,.6)', fontSize: 14.5 }}>
+              لسه معملتش أي صف. دوس "+ صف جديد" وابدأ.
+            </p>
+          ) : (
+            classes.map((c) => (
+              <Link to={`/teacher/classes/${c.id}`} key={c.id} style={{ textDecoration: 'none', color: 'inherit' }}>
+                <div className="list-row">
+                  <div>
+                    <p style={{ fontWeight: 700, fontSize: 14.5 }}>{c.title}</p>
+                    <p style={{ fontSize: 13, color: 'rgba(27,26,23,.6)' }}>
+                      {c.enrollments?.[0]?.count || 0} طالب · {c.lessons?.[0]?.count || 0} درس
+                    </p>
+                  </div>
                 </div>
-                <div className="progress-bar">
-                  <div style={{ width: `${s.progress_percent}%` }} />
-                </div>
-              </div>
-            ))}
-          </div>
+              </Link>
+            ))
+          )}
         </div>
       </main>
     </div>

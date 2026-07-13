@@ -46,7 +46,15 @@ export default function RegisterStudent() {
           </div>
           <div className="field">
             <label>كلمة المرور</label>
-            <input name="password" type="password" placeholder="••••••••" minLength={6} required />
+            <input
+              name="password"
+              type="password"
+              placeholder="8 أحرف على الأقل، تحتوي رقم وحرف"
+              minLength={8}
+              pattern="(?=.*[A-Za-z])(?=.*\d).{8,}"
+              title="لازم 8 أحرف على الأقل وتحتوي على حرف ورقم"
+              required
+            />
           </div>
           <button className="btn btn-primary" style={{ width: '100%' }} type="submit" disabled={loading}>
             {loading ? 'جاري الإنشاء...' : 'إنشاء الحساب'}

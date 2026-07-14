@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Sidebar from '../shared/Sidebar';
+import Avatar from '../shared/Avatar';
 import { supabase } from '../api/supabaseClient';
 
 export default function TeacherDashboard() {
@@ -10,6 +11,8 @@ export default function TeacherDashboard() {
   const [classes, setClasses] = useState([]);
   const [lessonsCount, setLessonsCount] = useState(0);
   const [studentsCount, setStudentsCount] = useState(0);
+  const [uploading, setUploading] = useState(false);
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
     load();
@@ -22,6 +25,7 @@ export default function TeacherDashboard() {
       setLoading(false);
       return;
     }
+    setUserId(authData.user.id);
 
     const { data: profileData } = await supabase
       .from('profiles')
@@ -61,6 +65,38 @@ export default function TeacherDashboard() {
     setLoading(false);
   }
 
+  async function handleAvatarUpload(e) {
+    const file = e.target.files?.[0];
+    if (!file || !userId) return;
+
+    if (!file.type.startsWith('image/')) {
+      alert('لازم ترفع صورة بس.');
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      alert('حجم الصورة أكبر من 5 ميجا.');
+      return;
+    }
+
+    setUploading(true);
+    const filePath = `${userId}/${Date.now()}-${file.name}`;
+    const { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, file, {
+      upsert: true,
+    });
+
+    if (uploadError) {
+      alert('حصل خطأ في رفع الصورة: ' + uploadError.message);
+      setUploading(false);
+      return;
+    }
+
+    const { data: publicUrl } = supabase.storage.from('avatars').getPublicUrl(filePath);
+    await supabase.from('profiles').update({ avatar_url: publicUrl.publicUrl }).eq('id', userId);
+
+    setUploading(false);
+    load();
+  }
+
   if (loading) {
     return (
       <div className="app-shell">
@@ -76,15 +112,25 @@ export default function TeacherDashboard() {
     <div className="app-shell">
       <Sidebar role="teacher" />
       <main className="main">
-        <div className="page-head">
-          <h1>أهلًا، {profile?.full_name || 'معلم'}</h1>
-          <p>
-            {teacherProfile
-              ? `${teacherProfile.subject || ''} — الاشتراك: ${
-                  teacherProfile.subscription_status === 'trial' ? 'فترة تجربة' : 'نشط'
-                }`
-              : 'استكمل بيانات حسابك للبدء'}
-          </p>
+        <div className="topbar">
+          <div className="headline">
+            <h1>أهلًا، {profile?.full_name || 'معلم'}</h1>
+            <p>
+              {teacherProfile
+                ? `${teacherProfile.subject || ''} — الاشتراك: ${
+                    teacherProfile.subscription_status === 'trial' ? 'فترة تجربة' : 'نشط'
+                  }`
+                : 'استكمل بيانات حسابك للبدء'}
+            </p>
+          </div>
+
+          <div className="avatar-upload">
+            <Avatar src={profile?.avatar_url} name={profile?.full_name} />
+            <label className="upload-btn">
+              {uploading ? 'جاري الرفع...' : profile?.avatar_url ? 'تغيير الصورة' : 'إضافة صورة شخصية'}
+              <input type="file" accept="image/*" onChange={handleAvatarUpload} disabled={uploading} />
+            </label>
+          </div>
         </div>
 
         <div className="grid cols-4" style={{ marginBottom: 28 }}>

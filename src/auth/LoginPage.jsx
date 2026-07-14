@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../api/supabaseClient';
+import { useLanguage } from '../i18n/LanguageContext';
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const { t, toggleLang } = useLanguage();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -17,7 +19,7 @@ export default function LoginPage() {
 
     const { data, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
     if (signInError) {
-      setError('البريد أو كلمة المرور غير صحيحة.');
+      setError('البريد أو كلمة المرور غير صحيحة / Invalid email or password.');
       setLoading(false);
       return;
     }
@@ -35,25 +37,30 @@ export default function LoginPage() {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <h1>تسجيل الدخول</h1>
-        <p className="sub">ادخل لصفّك وتابع طلابك</p>
+        <div style={{ textAlign: 'end', marginBottom: 8 }}>
+          <a onClick={toggleLang} style={{ cursor: 'pointer', fontSize: 13, color: '#8A6620', fontWeight: 700 }}>
+            🌐 {t('changeLanguage')}
+          </a>
+        </div>
+        <h1>{t('login')}</h1>
+        <p className="sub">إتقان · Itqan</p>
         {error && <p style={{ color: '#B14B2A', fontSize: 13.5, marginBottom: 14 }}>{error}</p>}
         <form onSubmit={handleSubmit}>
           <div className="field">
-            <label>البريد الإلكتروني</label>
+            <label>{t('email')}</label>
             <input name="email" type="email" placeholder="name@example.com" required />
           </div>
           <div className="field">
-            <label>كلمة المرور</label>
+            <label>{t('password')}</label>
             <input name="password" type="password" placeholder="••••••••" required />
           </div>
           <button className="btn btn-primary" style={{ width: '100%' }} type="submit" disabled={loading}>
-            {loading ? 'جاري الدخول...' : 'دخول'}
+            {loading ? t('loggingIn') : t('loginBtn')}
           </button>
         </form>
         <div className="auth-switch">
-          معملتش حساب لسه؟ <Link to="/register-teacher">سجّل كمعلم</Link> أو{' '}
-          <Link to="/register-student">سجّل كطالب</Link>
+          {t('noAccount')} <Link to="/register-teacher">{t('registerAsTeacher')}</Link>{' / '}
+          <Link to="/register-student">{t('registerAsStudent')}</Link>
         </div>
       </div>
     </div>

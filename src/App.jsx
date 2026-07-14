@@ -11,7 +11,10 @@ import StudentsList from './teacher/StudentsList';
 
 import StudentDashboard from './student/Dashboard';
 import LessonViewer from './student/LessonViewer';
+import Leaderboard from './student/Leaderboard';
+import QuizAttempt from './student/QuizAttempt';
 
+import ParentReport from './shared/ParentReport';
 import ProtectedRoute from './shared/ProtectedRoute';
 
 export default function App() {
@@ -22,6 +25,7 @@ export default function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register-teacher" element={<RegisterTeacher />} />
         <Route path="/register-student" element={<RegisterStudent />} />
+        <Route path="/report/:studentId" element={<ParentReport />} />
 
         <Route
           path="/teacher"
@@ -69,6 +73,22 @@ export default function App() {
           element={
             <ProtectedRoute allowedRole="student">
               <LessonViewer />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/student/leaderboard"
+          element={
+            <ProtectedRoute allowedRole="student">
+              <Leaderboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/student/quiz/:quizId"
+          element={
+            <ProtectedRoute allowedRole="student">
+              <QuizAttempt />
             </ProtectedRoute>
           }
         />

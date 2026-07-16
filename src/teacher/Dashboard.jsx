@@ -171,7 +171,7 @@ export default function TeacherDashboard() {
           </div>
 
           {classes.length === 0 ? (
-            <p style={{ color: 'rgba(27,26,23,.6)', fontSize: 14.5 }}>
+            <p style={{ color: 'var(--muted)', fontSize: 14.5 }}>
               لسه معملتش أي صف. دوس "+ صف جديد" وابدأ.
             </p>
           ) : (
@@ -180,7 +180,7 @@ export default function TeacherDashboard() {
                 <div className="list-row">
                   <div>
                     <p style={{ fontWeight: 700, fontSize: 14.5 }}>{c.title}</p>
-                    <p style={{ fontSize: 13, color: 'rgba(27,26,23,.6)' }}>
+                    <p style={{ fontSize: 13, color: 'var(--muted)' }}>
                       {c.enrollments?.[0]?.count || 0} طالب · {c.lessons?.[0]?.count || 0} درس
                     </p>
                   </div>

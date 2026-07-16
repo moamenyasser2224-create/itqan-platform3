@@ -38,13 +38,13 @@ export default function LoginPage() {
     <div className="auth-page">
       <div className="auth-card">
         <div style={{ textAlign: 'end', marginBottom: 8 }}>
-          <a onClick={toggleLang} style={{ cursor: 'pointer', fontSize: 13, color: '#8A6620', fontWeight: 700 }}>
+          <a onClick={toggleLang} style={{ cursor: 'pointer', fontSize: 13, color: 'var(--primary)', fontWeight: 700 }}>
             🌐 {t('changeLanguage')}
           </a>
         </div>
         <h1>{t('login')}</h1>
         <p className="sub">إتقان · Itqan</p>
-        {error && <p style={{ color: '#B14B2A', fontSize: 13.5, marginBottom: 14 }}>{error}</p>}
+        {error && <p style={{ color: 'var(--danger)', fontSize: 13.5, marginBottom: 14 }}>{error}</p>}
         <form onSubmit={handleSubmit}>
           <div className="field">
             <label>{t('email')}</label>

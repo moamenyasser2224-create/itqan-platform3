@@ -81,7 +81,7 @@ export default function LessonViewer() {
       <main className="main">
         <Link
           to="/student"
-          style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'var(--gold-dim)', fontWeight: 700, marginBottom: 18, textDecoration: 'none' }}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'var(--primary)', fontWeight: 700, marginBottom: 18, textDecoration: 'none' }}
         >
           ← رجوع لصفوفي
         </Link>
@@ -113,7 +113,7 @@ export default function LessonViewer() {
         <div className="card" style={{ marginBottom: 24 }}>
           <h3 style={{ fontSize: 16, marginBottom: 14 }}>{t('materialsAndFiles')}</h3>
           {materials.length === 0 ? (
-            <p style={{ color: 'rgba(27,26,23,.6)', fontSize: 14.5 }}>{t('noMaterials')}</p>
+            <p style={{ color: 'var(--muted)', fontSize: 14.5 }}>{t('noMaterials')}</p>
           ) : (
             materials.map((m) => (
               <div className="list-row" key={m.id}>
@@ -128,13 +128,13 @@ export default function LessonViewer() {
 
         <div className="card" style={{ marginBottom: 24 }}>
           {lessons.length === 0 ? (
-            <p style={{ color: 'rgba(27,26,23,.6)', fontSize: 14.5 }}>لسه مفيش دروس في الصف ده.</p>
+            <p style={{ color: 'var(--muted)', fontSize: 14.5 }}>لسه مفيش دروس في الصف ده.</p>
           ) : (
             lessons.map((l) => (
               <div className="list-row" key={l.id}>
                 <div>
                   <p style={{ fontWeight: 700, fontSize: 14.5, marginBottom: 4 }}>{l.title}</p>
-                  <p style={{ fontSize: 13, color: 'rgba(27,26,23,.6)' }}>
+                  <p style={{ fontSize: 13, color: 'var(--muted)' }}>
                     {l.type === 'recorded'
                       ? 'درس مسجل'
                       : `الحصة المباشرة: ${new Date(l.live_scheduled_at).toLocaleString('ar-EG')}`}
@@ -164,7 +164,7 @@ export default function LessonViewer() {
               <div className="list-row" key={q.id}>
                 <div>
                   <p style={{ fontWeight: 700, fontSize: 14.5 }}>{q.title}</p>
-                  <p style={{ fontSize: 13, color: 'rgba(27,26,23,.6)' }}>{q.duration_minutes} دقيقة</p>
+                  <p style={{ fontSize: 13, color: 'var(--muted)' }}>{q.duration_minutes} دقيقة</p>
                 </div>
                 <Link to={`/student/quiz/${q.id}`} className="btn btn-primary">
                   ابدأ الامتحان

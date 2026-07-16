@@ -41,7 +41,7 @@ export default function RegisterTeacher() {
       <div className="auth-card">
         <h1>سجّل كمعلم</h1>
         <p className="sub">14 يوم تجربة مجانية، وبعدها 299 جنيه شهريًا</p>
-        {error && <p style={{ color: '#B14B2A', fontSize: 13.5, marginBottom: 14 }}>{error}</p>}
+        {error && <p style={{ color: 'var(--danger)', fontSize: 13.5, marginBottom: 14 }}>{error}</p>}
         <form onSubmit={handleSubmit}>
           <div className="field">
             <label>الاسم الكامل</label>

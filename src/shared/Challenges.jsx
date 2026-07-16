@@ -112,7 +112,7 @@ export default function Challenges({ classId, isTeacher }) {
       {loading ? (
         <div className="skeleton" style={{height:13,width:120}} />
       ) : challenges.length === 0 ? (
-        <p style={{ color: 'rgba(27,26,23,.6)', fontSize: 14.5 }}>لا يوجد تحديات نشطة حاليًا.</p>
+        <p style={{ color: 'var(--muted)', fontSize: 14.5 }}>لا يوجد تحديات نشطة حاليًا.</p>
       ) : (
         challenges.map((c) => {
           const progress = myProgress[c.id] || 0;
@@ -121,7 +121,7 @@ export default function Challenges({ classId, isTeacher }) {
             <div className="list-row" key={c.id}>
               <div>
                 <p style={{ fontWeight: 700, fontSize: 14.5 }}>{c.title}</p>
-                <p style={{ fontSize: 13, color: 'rgba(27,26,23,.6)' }}>
+                <p style={{ fontSize: 13, color: 'var(--muted)' }}>
                   {c.period === 'daily' ? 'يومي' : 'أسبوعي'} · حتى {new Date(c.ends_at).toLocaleDateString('ar-EG')}
                 </p>
               </div>

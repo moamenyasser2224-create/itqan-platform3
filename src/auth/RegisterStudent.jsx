@@ -34,7 +34,7 @@ export default function RegisterStudent() {
       <div className="auth-card">
         <h1>سجّل كطالب</h1>
         <p className="sub">وابدأ بمتابعة دروسك مع معلمك</p>
-        {error && <p style={{ color: '#B14B2A', fontSize: 13.5, marginBottom: 14 }}>{error}</p>}
+        {error && <p style={{ color: 'var(--danger)', fontSize: 13.5, marginBottom: 14 }}>{error}</p>}
         <form onSubmit={handleSubmit}>
           <div className="field">
             <label>الاسم الكامل</label>

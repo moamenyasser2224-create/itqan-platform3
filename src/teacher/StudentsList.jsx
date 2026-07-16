@@ -69,13 +69,13 @@ export default function StudentsList() {
               <SkeletonRow />
             </>
           ) : students.length === 0 ? (
-            <p style={{ color: 'rgba(27,26,23,.6)', fontSize: 14.5 }}>لسه مفيش طلاب مشتركين في صفوفك.</p>
+            <p style={{ color: 'var(--muted)', fontSize: 14.5 }}>لسه مفيش طلاب مشتركين في صفوفك.</p>
           ) : (
             students.map((s, i) => (
               <div className="list-row" key={i}>
                 <div>
                   <p style={{ fontWeight: 700, fontSize: 14.5 }}>{s.full_name}</p>
-                  <p style={{ fontSize: 13, color: 'rgba(27,26,23,.6)' }}>{s.class_title}</p>
+                  <p style={{ fontSize: 13, color: 'var(--muted)' }}>{s.class_title}</p>
                 </div>
               </div>
             ))

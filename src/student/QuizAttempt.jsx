@@ -100,7 +100,7 @@ export default function QuizAttempt() {
             <h1 style={{ fontSize: 30, marginBottom: 10 }}>
               {result.score} / {result.total}
             </h1>
-            <p style={{ color: 'rgba(27,26,23,.6)', marginBottom: 24 }}>
+            <p style={{ color: 'var(--muted)', marginBottom: 24 }}>
               نتيجتك في "{quiz?.title}"
             </p>
             <button className="btn btn-primary" onClick={() => navigate(-1)}>
@@ -126,7 +126,7 @@ export default function QuizAttempt() {
               fontFamily: 'Amiri, serif',
               fontSize: 22,
               fontWeight: 700,
-              color: secondsLeft < 60 ? '#B14B2A' : '#1B1A17',
+              color: secondsLeft < 60 ? 'var(--danger)' : '#1B1A17',
             }}
           >
             {minutes}:{seconds}

@@ -55,7 +55,7 @@ export default function Leaderboard() {
       <main className="main">
         <Link
           to="/student"
-          style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'var(--gold-dim)', fontWeight: 700, marginBottom: 18, textDecoration: 'none' }}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'var(--primary)', fontWeight: 700, marginBottom: 18, textDecoration: 'none' }}
         >
           ← رجوع لصفوفي
         </Link>
@@ -86,7 +86,7 @@ export default function Leaderboard() {
           {loading ? (
             <p>{t('loading')}</p>
           ) : ranking.length === 0 ? (
-            <p style={{ color: 'rgba(27,26,23,.6)', fontSize: 14.5 }}>لسه مفيش بيانات كفاية.</p>
+            <p style={{ color: 'var(--muted)', fontSize: 14.5 }}>لسه مفيش بيانات كفاية.</p>
           ) : (
             ranking.slice(0, 20).map((r, i) => (
               <div
@@ -99,7 +99,7 @@ export default function Leaderboard() {
                   <Avatar size="sm" src={r.avatar_url} name={r.full_name} />
                   <p style={{ fontWeight: 700, fontSize: 14.5 }}>{r.full_name}</p>
                 </div>
-                <p style={{ fontSize: 13, color: 'rgba(27,26,23,.6)' }}>{r.lessons} درس</p>
+                <p style={{ fontSize: 13, color: 'var(--muted)' }}>{r.lessons} درس</p>
               </div>
             ))
           )}

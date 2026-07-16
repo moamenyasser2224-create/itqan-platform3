@@ -111,7 +111,7 @@ export default function StudentDashboard() {
                 <div className="list-row">
                   <div>
                     <p style={{ fontWeight: 700, fontSize: 14.5 }}>{l.title}</p>
-                    <p style={{ fontSize: 13, color: 'rgba(27,26,23,.6)' }}>{l.classes?.title}</p>
+                    <p style={{ fontSize: 13, color: 'var(--muted)' }}>{l.classes?.title}</p>
                   </div>
                   <span className="btn btn-ghost" style={{ pointerEvents: 'none' }}>
                     ابدأ
@@ -134,7 +134,7 @@ export default function StudentDashboard() {
                       src={c.teacher_profiles?.profiles?.avatar_url}
                       name={c.teacher_profiles?.profiles?.full_name}
                     />
-                    <p style={{ fontSize: 13.5, color: 'rgba(27,26,23,.62)' }}>
+                    <p style={{ fontSize: 13.5, color: 'var(--muted)' }}>
                       {c.teacher_profiles?.profiles?.full_name || 'المعلم'}
                     </p>
                   </div>
@@ -163,7 +163,7 @@ export default function StudentDashboard() {
                     src={c.teacher_profiles?.profiles?.avatar_url}
                     name={c.teacher_profiles?.profiles?.full_name}
                   />
-                  <p style={{ fontSize: 13.5, color: 'rgba(27,26,23,.62)' }}>
+                  <p style={{ fontSize: 13.5, color: 'var(--muted)' }}>
                     {c.teacher_profiles?.profiles?.full_name || 'المعلم'} · {c.teacher_profiles?.subject}
                   </p>
                 </div>

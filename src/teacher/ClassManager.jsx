@@ -115,7 +115,7 @@ export default function ClassManager() {
               <Link to={`/teacher/classes/${c.id}`} key={c.id} style={{ textDecoration: 'none' }}>
                 <div className="card">
                   <h3 style={{ fontSize: 17, marginBottom: 6 }}>{c.title}</h3>
-                  <p style={{ fontSize: 13.5, color: 'rgba(27,26,23,.62)', marginBottom: 14 }}>
+                  <p style={{ fontSize: 13.5, color: 'var(--muted)', marginBottom: 14 }}>
                     {c.description || 'بدون وصف'}
                   </p>
                   <p style={{ fontSize: 13, fontWeight: 700 }}>

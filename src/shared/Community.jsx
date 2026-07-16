@@ -92,7 +92,7 @@ export default function Community({ classId }) {
       {loading ? (
         <div className="skeleton" style={{height:13,width:120}} />
       ) : questions.length === 0 ? (
-        <p style={{ color: 'rgba(27,26,23,.6)', fontSize: 14.5 }}>لسه مفيش أسئلة. ابدأ أول نقاش.</p>
+        <p style={{ color: 'var(--muted)', fontSize: 14.5 }}>لسه مفيش أسئلة. ابدأ أول نقاش.</p>
       ) : (
         questions.map((q) => (
           <div key={q.id} style={{ borderBottom: '1px solid var(--line)', padding: '14px 0' }}>
@@ -102,11 +102,11 @@ export default function Community({ classId }) {
             >
               <div>
                 <p style={{ fontWeight: 700, fontSize: 14.5 }}>{q.title}</p>
-                <p style={{ fontSize: 13, color: 'rgba(27,26,23,.6)' }}>
+                <p style={{ fontSize: 13, color: 'var(--muted)' }}>
                   {q.profiles?.full_name} · {q.answers?.length || 0} إجابة
                 </p>
               </div>
-              <span style={{ fontSize: 13, color: '#8A6620' }}>
+              <span style={{ fontSize: 13, color: 'var(--primary)' }}>
                 {openQuestion === q.id ? 'اغلاق' : 'عرض'}
               </span>
             </div>

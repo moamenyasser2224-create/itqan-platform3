@@ -108,13 +108,13 @@ export default function QuizManager({ classId }) {
       {loading ? (
         <div className="skeleton" style={{height:13,width:120}} />
       ) : quizzes.length === 0 ? (
-        <p style={{ color: 'rgba(27,26,23,.6)', fontSize: 14.5 }}>لسه مفيش امتحانات.</p>
+        <p style={{ color: 'var(--muted)', fontSize: 14.5 }}>لسه مفيش امتحانات.</p>
       ) : (
         quizzes.map((q) => (
           <div className="list-row" key={q.id}>
             <div>
               <p style={{ fontWeight: 700, fontSize: 14.5 }}>{q.title}</p>
-              <p style={{ fontSize: 13, color: 'rgba(27,26,23,.6)' }}>
+              <p style={{ fontSize: 13, color: 'var(--muted)' }}>
                 {q.duration_minutes} دقيقة · {q.quiz_questions?.[0]?.count || 0} سؤال
               </p>
             </div>
@@ -131,7 +131,7 @@ export default function QuizManager({ classId }) {
 
           {quizQuestions.map((q, i) => (
             <p key={q.id} style={{ fontSize: 13.5, marginBottom: 8 }}>
-              {i + 1}. {q.question_text} <span style={{ color: '#8A6620' }}>(الإجابة: {q.correct_option})</span>
+              {i + 1}. {q.question_text} <span style={{ color: 'var(--primary)' }}>(الإجابة: {q.correct_option})</span>
             </p>
           ))}
 

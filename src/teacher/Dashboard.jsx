@@ -4,8 +4,10 @@ import Sidebar from '../shared/Sidebar';
 import Avatar from '../shared/Avatar';
 import { SkeletonStats, SkeletonRow } from '../shared/Skeleton';
 import { supabase } from '../api/supabaseClient';
+import { useToast } from '../shared/ToastContext';
 
 export default function TeacherDashboard() {
+  const toast = useToast();
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState(null);
   const [teacherProfile, setTeacherProfile] = useState(null);
@@ -71,11 +73,11 @@ export default function TeacherDashboard() {
     if (!file || !userId) return;
 
     if (!file.type.startsWith('image/')) {
-      alert('لازم ترفع صورة بس.');
+      toast('لازم ترفع صورة بس.', 'error');
       return;
     }
     if (file.size > 5 * 1024 * 1024) {
-      alert('حجم الصورة أكبر من 5 ميجا.');
+      toast('حجم الصورة أكبر من 5 ميجا.', 'error');
       return;
     }
 
@@ -86,7 +88,7 @@ export default function TeacherDashboard() {
     });
 
     if (uploadError) {
-      alert('حصل خطأ في رفع الصورة: ' + uploadError.message);
+      toast('حصل خطأ في رفع الصورة: ' + uploadError.message, 'error');
       setUploading(false);
       return;
     }
@@ -96,6 +98,7 @@ export default function TeacherDashboard() {
 
     setUploading(false);
     load();
+    toast('تم تحديث صورتك الشخصية', 'success');
   }
 
   if (loading) {

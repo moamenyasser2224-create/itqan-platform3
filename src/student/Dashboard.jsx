@@ -5,8 +5,10 @@ import Avatar from '../shared/Avatar';
 import { SkeletonCard } from '../shared/Skeleton';
 import EmptyState from '../shared/EmptyState';
 import { supabase } from '../api/supabaseClient';
+import { useToast } from '../shared/ToastContext';
 
 export default function StudentDashboard() {
+  const toast = useToast();
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState(null);
   const [myClasses, setMyClasses] = useState([]);
@@ -67,8 +69,12 @@ export default function StudentDashboard() {
       class_id: classId,
     });
     setEnrolling(null);
-    if (!error) load();
-    else alert('حصل خطأ: ' + error.message);
+    if (!error) {
+      load();
+      toast('تم الاشتراك في الصف بنجاح 🎉', 'success');
+    } else {
+      toast('حصل خطأ: ' + error.message, 'error');
+    }
   }
 
   if (loading) {

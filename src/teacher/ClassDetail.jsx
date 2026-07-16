@@ -6,9 +6,11 @@ import { useLanguage } from '../i18n/LanguageContext';
 import Community from '../shared/Community';
 import Challenges from '../shared/Challenges';
 import QuizManager from './QuizManager';
+import { useToast } from '../shared/ToastContext';
 
 export default function ClassDetail() {
   const { classId } = useParams();
+  const toast = useToast();
   const { t } = useLanguage();
   const [classInfo, setClassInfo] = useState(null);
   const [lessons, setLessons] = useState([]);
@@ -66,12 +68,12 @@ export default function ClassDetail() {
       if (file) {
         const maxSizeMB = 500;
         if (!file.type.startsWith('video/')) {
-          alert('لازم ترفع ملف فيديو بس.');
+          toast('لازم ترفع ملف فيديو بس.', 'error');
           setSaving(false);
           return;
         }
         if (file.size > maxSizeMB * 1024 * 1024) {
-          alert(`حجم الفيديو أكبر من ${maxSizeMB} ميجا. اضغطه وحاول تاني.`);
+          toast(`حجم الفيديو أكبر من ${maxSizeMB} ميجا. اضغطه وحاول تاني.`, 'error');
           setSaving(false);
           return;
         }
@@ -82,7 +84,7 @@ export default function ClassDetail() {
           .upload(filePath, file);
 
         if (uploadError) {
-          alert('حصل خطأ في رفع الفيديو: ' + uploadError.message);
+          toast('حصل خطأ في رفع الفيديو: ' + uploadError.message, 'error');
           setSaving(false);
           setUploadProgress('');
           return;
@@ -103,8 +105,9 @@ export default function ClassDetail() {
       setShowForm(false);
       e.target.reset();
       load();
+      toast('تمت إضافة الدرس بنجاح', 'success');
     } else {
-      alert('حصل خطأ: ' + error.message);
+      toast('حصل خطأ: ' + error.message, 'error');
     }
   }
 
@@ -122,7 +125,7 @@ export default function ClassDetail() {
 
     const maxSizeMB = 50;
     if (file.size > maxSizeMB * 1024 * 1024) {
-      alert(`حجم الملف أكبر من ${maxSizeMB} ميجا.`);
+      toast(`حجم الملف أكبر من ${maxSizeMB} ميجا.`, 'error');
       setSavingMaterial(false);
       return;
     }
@@ -131,7 +134,7 @@ export default function ClassDetail() {
     const { error: uploadError } = await supabase.storage.from('materials').upload(filePath, file);
 
     if (uploadError) {
-      alert('حصل خطأ في رفع الملف: ' + uploadError.message);
+      toast('حصل خطأ في رفع الملف: ' + uploadError.message, 'error');
       setSavingMaterial(false);
       return;
     }
@@ -151,8 +154,9 @@ export default function ClassDetail() {
       setShowMaterialForm(false);
       e.target.reset();
       load();
+      toast('تم رفع الملف بنجاح', 'success');
     } else {
-      alert('حصل خطأ: ' + error.message);
+      toast('حصل خطأ: ' + error.message, 'error');
     }
   }
 

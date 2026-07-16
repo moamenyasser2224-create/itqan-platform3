@@ -16,10 +16,12 @@ import QuizAttempt from './student/QuizAttempt';
 
 import ParentReport from './shared/ParentReport';
 import ProtectedRoute from './shared/ProtectedRoute';
+import UpdateChecker from './shared/UpdateChecker';
 
 export default function App() {
   return (
     <BrowserRouter basename="/itqan-platform3">
+      <UpdateChecker />
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<LoginPage />} />

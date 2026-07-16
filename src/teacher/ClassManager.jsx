@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Sidebar from '../shared/Sidebar';
 import { SkeletonCard } from '../shared/Skeleton';
+import EmptyState from '../shared/EmptyState';
 import { supabase } from '../api/supabaseClient';
 
 export default function ClassManager() {
@@ -98,9 +99,15 @@ export default function ClassManager() {
           </div>
         ) : classes.length === 0 ? (
           <div className="card">
-            <p style={{ color: 'rgba(27,26,23,.6)', fontSize: 14.5 }}>
-              لسه معملتش صفوف. ابدأ بإنشاء أول صف ليك.
-            </p>
+            <EmptyState
+              title="لسه معملتش صفوف"
+              subtitle="ابدأ بإنشاء أول صف ليك وشوفه هنا"
+              action={
+                <button className="btn btn-primary" onClick={() => setShowForm(true)}>
+                  + صف جديد
+                </button>
+              }
+            />
           </div>
         ) : (
           <div className="grid cols-2">

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Sidebar from '../shared/Sidebar';
 import Avatar from '../shared/Avatar';
 import { SkeletonCard } from '../shared/Skeleton';
+import EmptyState from '../shared/EmptyState';
 import { supabase } from '../api/supabaseClient';
 
 export default function StudentDashboard() {
@@ -149,7 +150,7 @@ export default function StudentDashboard() {
 
         {availableClasses.length === 0 ? (
           <div className="card">
-            <p style={{ color: 'rgba(27,26,23,.6)', fontSize: 14.5 }}>مفيش صفوف متاحة دلوقتي.</p>
+            <EmptyState title="مفيش صفوف متاحة دلوقتي" subtitle="تابعنا، صفوف جديدة بتضاف باستمرار" />
           </div>
         ) : (
           <div className="grid cols-2">

@@ -3,19 +3,23 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { supabase } from '../api/supabaseClient';
 import Avatar from './Avatar';
 import { useLanguage } from '../i18n/LanguageContext';
+import { IconHome, IconBook, IconUsers, IconTrophy, IconGlobe, IconLogout } from './icons';
 
 export default function Sidebar({ role }) {
   const navigate = useNavigate();
-  const { t, lang, toggleLang } = useLanguage();
+  const { t, toggleLang } = useLanguage();
   const [profile, setProfile] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
 
   const teacherLinks = [
-    { to: '/teacher', label: t('home'), end: true },
-    { to: '/teacher/classes', label: t('myClasses') },
-    { to: '/teacher/students', label: t('students') },
+    { to: '/teacher', label: t('home'), end: true, icon: IconHome },
+    { to: '/teacher/classes', label: t('myClasses'), icon: IconBook },
+    { to: '/teacher/students', label: t('students'), icon: IconUsers },
   ];
-  const studentLinks = [{ to: '/student', label: t('home'), end: true }];
+  const studentLinks = [
+    { to: '/student', label: t('home'), end: true, icon: IconHome },
+    { to: '/student/leaderboard', label: 'الترتيب', icon: IconTrophy },
+  ];
   const links = role === 'teacher' ? teacherLinks : studentLinks;
 
   useEffect(() => {
@@ -64,22 +68,29 @@ export default function Sidebar({ role }) {
           </div>
         </div>
 
-        {links.map((link) => (
-          <NavLink
-            key={link.to}
-            to={link.to}
-            end={link.end}
-            className={({ isActive }) => (isActive ? 'active' : '')}
-            onClick={() => setMenuOpen(false)}
-          >
-            {link.label}
-          </NavLink>
-        ))}
+        {links.map((link) => {
+          const Icon = link.icon;
+          return (
+            <NavLink
+              key={link.to}
+              to={link.to}
+              end={link.end}
+              className={({ isActive }) => (isActive ? 'active' : '')}
+              onClick={() => setMenuOpen(false)}
+              style={{ display: 'flex', alignItems: 'center', gap: 10 }}
+            >
+              <Icon size={17} />
+              {link.label}
+            </NavLink>
+          );
+        })}
         <div style={{ flex: 1 }} />
-        <a onClick={toggleLang} style={{ cursor: 'pointer' }}>
-          🌐 {t('changeLanguage')}
+        <a onClick={toggleLang} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 10 }}>
+          <IconGlobe size={17} />
+          {t('changeLanguage')}
         </a>
-        <a onClick={handleLogout} style={{ cursor: 'pointer' }}>
+        <a onClick={handleLogout} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 10 }}>
+          <IconLogout size={17} />
           {t('logout')}
         </a>
       </aside>

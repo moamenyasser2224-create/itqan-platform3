@@ -42,8 +42,9 @@ export default function LoginPage() {
             🌐 {t('changeLanguage')}
           </a>
         </div>
+        <img className="brand-logo" src={`${import.meta.env.BASE_URL}logo-mark.png`} alt="إتقان" />
         <h1>{t('login')}</h1>
-        <p className="sub">إتقان · Itqan</p>
+        <p className="sub">منصة إتقان التعليمية</p>
         {error && <p style={{ color: 'var(--danger)', fontSize: 13.5, marginBottom: 14 }}>{error}</p>}
         <form onSubmit={handleSubmit}>
           <div className="field">

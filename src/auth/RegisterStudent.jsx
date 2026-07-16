@@ -32,6 +32,7 @@ export default function RegisterStudent() {
   return (
     <div className="auth-page">
       <div className="auth-card">
+        <img className="brand-logo" src={`${import.meta.env.BASE_URL}logo-mark.png`} alt="إتقان" />
         <h1>سجّل كطالب</h1>
         <p className="sub">وابدأ بمتابعة دروسك مع معلمك</p>
         {error && <p style={{ color: 'var(--danger)', fontSize: 13.5, marginBottom: 14 }}>{error}</p>}

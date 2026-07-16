@@ -45,9 +45,9 @@ export default function Sidebar({ role }) {
   return (
     <>
       <div className="mobile-topbar">
-        <div className="logo">
-          {t('appName')}
-          <span>.</span>
+        <div className="brand">
+          <img src={`${import.meta.env.BASE_URL}logo-mark.png`} alt={t('appName')} />
+          <span>{t('appName')}</span>
         </div>
         <button onClick={() => setMenuOpen((v) => !v)} aria-label="menu">
           ☰
@@ -55,9 +55,9 @@ export default function Sidebar({ role }) {
       </div>
 
       <aside className={`sidebar ${menuOpen ? 'open' : ''}`}>
-        <div className="logo">
-          {t('appName')}
-          <span>.</span>
+        <div className="brand">
+          <img src={`${import.meta.env.BASE_URL}logo-mark.png`} alt={t('appName')} />
+          <span>{t('appName')}</span>
         </div>
 
         <div className="profile-chip">

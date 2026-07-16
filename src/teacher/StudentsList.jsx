@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Sidebar from '../shared/Sidebar';
+import { SkeletonRow } from '../shared/Skeleton';
 import { supabase } from '../api/supabaseClient';
 
 export default function StudentsList() {
@@ -62,7 +63,11 @@ export default function StudentsList() {
 
         <div className="card">
           {loading ? (
-            <p>جاري التحميل...</p>
+            <>
+              <SkeletonRow />
+              <SkeletonRow />
+              <SkeletonRow />
+            </>
           ) : students.length === 0 ? (
             <p style={{ color: 'rgba(27,26,23,.6)', fontSize: 14.5 }}>لسه مفيش طلاب مشتركين في صفوفك.</p>
           ) : (

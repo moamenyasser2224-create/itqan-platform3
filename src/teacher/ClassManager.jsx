@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Sidebar from '../shared/Sidebar';
+import { SkeletonCard } from '../shared/Skeleton';
 import { supabase } from '../api/supabaseClient';
 
 export default function ClassManager() {
@@ -91,7 +92,10 @@ export default function ClassManager() {
         )}
 
         {loading ? (
-          <p>جاري التحميل...</p>
+          <div className="grid cols-2">
+            <SkeletonCard />
+            <SkeletonCard />
+          </div>
         ) : classes.length === 0 ? (
           <div className="card">
             <p style={{ color: 'rgba(27,26,23,.6)', fontSize: 14.5 }}>

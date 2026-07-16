@@ -81,7 +81,11 @@ export default function QuizAttempt() {
       <div className="app-shell">
         <Sidebar role="student" />
         <main className="main">
-          <p>جاري التحميل...</p>
+          <div className="skeleton" style={{ height: 24, width: 200, marginBottom: 24 }} />
+          <div className="card" style={{ marginBottom: 16 }}>
+            <div className="skeleton" style={{ height: 16, width: '80%', marginBottom: 14 }} />
+            <div className="skeleton" style={{ height: 12, width: '40%' }} />
+          </div>
         </main>
       </div>
     );

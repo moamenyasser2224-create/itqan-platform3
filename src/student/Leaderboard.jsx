@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import Sidebar from '../shared/Sidebar';
 import Avatar from '../shared/Avatar';
 import { supabase } from '../api/supabaseClient';
@@ -52,6 +53,12 @@ export default function Leaderboard() {
     <div className="app-shell">
       <Sidebar role="student" />
       <main className="main">
+        <Link
+          to="/student"
+          style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'var(--gold-dim)', fontWeight: 700, marginBottom: 18, textDecoration: 'none' }}
+        >
+          ← رجوع لصفوفي
+        </Link>
         <div className="page-head">
           <h1>لوحة التقدم والترتيب</h1>
           <p>شوف تقدمك مقارنة بزمايلك</p>

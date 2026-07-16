@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Sidebar from '../shared/Sidebar';
 import Avatar from '../shared/Avatar';
+import { SkeletonStats, SkeletonRow } from '../shared/Skeleton';
 import { supabase } from '../api/supabaseClient';
 
 export default function TeacherDashboard() {
@@ -102,7 +103,14 @@ export default function TeacherDashboard() {
       <div className="app-shell">
         <Sidebar role="teacher" />
         <main className="main">
-          <p>جاري التحميل...</p>
+          <div className="skeleton" style={{ height: 28, width: 220, marginBottom: 10 }} />
+          <div className="skeleton" style={{ height: 14, width: 300, marginBottom: 28 }} />
+          <SkeletonStats count={4} />
+          <div className="card">
+            <SkeletonRow />
+            <SkeletonRow />
+            <SkeletonRow />
+          </div>
         </main>
       </div>
     );

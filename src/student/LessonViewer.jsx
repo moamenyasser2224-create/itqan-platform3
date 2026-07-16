@@ -79,18 +79,29 @@ export default function LessonViewer() {
     <div className="app-shell">
       <Sidebar role="student" />
       <main className="main">
+        <Link
+          to="/student"
+          style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'var(--gold-dim)', fontWeight: 700, marginBottom: 18, textDecoration: 'none' }}
+        >
+          ← رجوع لصفوفي
+        </Link>
         <div className="page-head">
           <h1>{classInfo?.title}</h1>
           <p>{classInfo?.description}</p>
         </div>
 
         {playingLesson && (
-          <div className="card" style={{ marginBottom: 24, padding: 0, overflow: 'hidden' }}>
+          <div
+            className="card fade-in"
+            style={{ marginBottom: 24, padding: 0, overflow: 'hidden', border: 'none', boxShadow: 'var(--shadow-lg)' }}
+          >
             {playingLesson.video_url ? (
               <video
+                key={playingLesson.id}
                 src={playingLesson.video_url}
                 controls
-                style={{ width: '100%', display: 'block', maxHeight: 460 }}
+                autoPlay
+                style={{ width: '100%', display: 'block', maxHeight: 460, background: '#000' }}
                 onEnded={() => markWatched(playingLesson)}
               />
             ) : (

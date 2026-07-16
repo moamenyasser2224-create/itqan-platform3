@@ -110,7 +110,7 @@ export default function Challenges({ classId, isTeacher }) {
       )}
 
       {loading ? (
-        <p>جاري التحميل...</p>
+        <div className="skeleton" style={{height:13,width:120}} />
       ) : challenges.length === 0 ? (
         <p style={{ color: 'rgba(27,26,23,.6)', fontSize: 14.5 }}>لا يوجد تحديات نشطة حاليًا.</p>
       ) : (

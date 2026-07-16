@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import Sidebar from '../shared/Sidebar';
 import { supabase } from '../api/supabaseClient';
 import { useLanguage } from '../i18n/LanguageContext';
@@ -171,12 +171,18 @@ export default function ClassDetail() {
     <div className="app-shell">
       <Sidebar role="teacher" />
       <main className="main">
-        <div className="page-head" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 12 }}>
-          <div>
+        <Link
+          to="/teacher/classes"
+          style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'var(--gold-dim)', fontWeight: 700, marginBottom: 18, textDecoration: 'none' }}
+        >
+          ← رجوع لصفوفي
+        </Link>
+        <div className="topbar" style={{ alignItems: 'flex-end' }}>
+          <div className="headline">
             <h1>{classInfo?.title}</h1>
             <p>{classInfo?.description}</p>
           </div>
-          <div style={{ display: 'flex', gap: 10 }}>
+          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
             <button className="btn btn-ghost" onClick={() => setShowMaterialForm((s) => !s)}>
               {showMaterialForm ? t('cancel') : t('addMaterial')}
             </button>

@@ -106,7 +106,7 @@ export default function QuizManager({ classId }) {
       )}
 
       {loading ? (
-        <p>جاري التحميل...</p>
+        <div className="skeleton" style={{height:13,width:120}} />
       ) : quizzes.length === 0 ? (
         <p style={{ color: 'rgba(27,26,23,.6)', fontSize: 14.5 }}>لسه مفيش امتحانات.</p>
       ) : (
